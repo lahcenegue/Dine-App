@@ -1,3 +1,4 @@
+import 'package:dinetemp/screens/content_screen.dart';
 import 'package:dinetemp/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
 
@@ -76,15 +77,14 @@ class _SubMattersListState extends State<SubMattersList> {
                     ),
                     trailing: const Icon(Icons.arrow_back_ios_new),
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => CategorieDetail(
-                      //       catId: hvm.listSubCateg![index].id,
-                      //       name: hvm.listSubCateg![index].name,
-                      //     ),
-                      //   ),
-                      // );
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => ContentScreen(
+                            subMatterViewModel: hvm.listSubMatter![index],
+                          ),
+                        ),
+                      );
                     },
                   ),
                 );
