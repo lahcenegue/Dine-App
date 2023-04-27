@@ -3,6 +3,7 @@ import 'package:dinetemp/view_model/subcategories_view_model.dart';
 import 'package:flutter/material.dart';
 
 import '../players/audio_player_screen.dart';
+import '../players/html_viewer_screen.dart';
 
 class ContentScreen extends StatefulWidget {
   final SubMatterViewModel subMatterViewModel;
@@ -42,7 +43,9 @@ class _ContentScreenState extends State<ContentScreen> {
                 child: CircularProgressIndicator(),
               )
             : hvm.contentData!.listLinks!.isEmpty
-                ? AudioPlayerScreen()
+                ? HtmlViwerScreen(
+                    text: hvm.contentData!.comment,
+                  )
                 : Center(
                     child: Column(
                       children: [
