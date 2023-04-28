@@ -33,17 +33,13 @@ class _ContentScreenState extends State<ContentScreen> {
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
-        appBar: AppBar(
-          title: Text(
-            widget.subMatterViewModel.name,
-          ),
-        ),
         body: hvm.contentData == null
             ? const Center(
                 child: CircularProgressIndicator(),
               )
             : hvm.contentData!.listLinks!.isEmpty
                 ? HtmlViwerScreen(
+                    title: hvm.contentData!.name,
                     text: hvm.contentData!.comment,
                   )
                 : Center(
