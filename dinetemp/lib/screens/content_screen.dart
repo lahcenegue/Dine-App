@@ -1,8 +1,6 @@
 import 'package:dinetemp/view_model/home_view_model.dart';
 import 'package:dinetemp/view_model/subcategories_view_model.dart';
 import 'package:flutter/material.dart';
-
-import '../players/audio_player_screen.dart';
 import '../players/html_viewer_screen.dart';
 import '../widgets/screen_picker.dart';
 

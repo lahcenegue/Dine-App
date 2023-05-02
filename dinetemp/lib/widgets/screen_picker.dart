@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../players/audio_player_screen.dart';
 import '../players/mp4_player.dart';
+import '../players/pdf_player_screen.dart';
 import '../players/youtube_player_screen.dart';
 import '../view_model/content_view_model.dart';
 
@@ -37,7 +38,10 @@ Widget screenPiker(ContentViewModel contentViewModel) {
 
   //pdf pages
   else if (pdf.isNotEmpty) {
-    print('=====================pdf');
+    return PdfPlayerScreen(
+      link: contentViewModel.listLinks!.first,
+      title: contentViewModel.name,
+    );
   }
 
   //youtube pages

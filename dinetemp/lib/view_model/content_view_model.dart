@@ -1,3 +1,4 @@
+import 'package:dinetemp/constants/constants.dart';
 import 'package:dinetemp/models/content_model.dart';
 
 class ContentViewModel {
@@ -34,7 +35,11 @@ class ContentViewModel {
     List<String> links = [];
     if (_contentModel.likaty!.isNotEmpty) {
       for (int i = 0; i < _contentModel.likaty!.length; i++) {
-        links.add(_contentModel.likaty![i].link!);
+        if (_contentModel.likaty![i].link!.contains('http')) {
+          links.add(_contentModel.likaty![i].link!);
+        } else {
+          links.add('$kUrl/${_contentModel.likaty![i].link!}');
+        }
       }
     }
     return links;
