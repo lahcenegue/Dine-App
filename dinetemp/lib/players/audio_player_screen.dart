@@ -47,11 +47,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   Future<void> _init() async {
     String urlSound;
     for (int i = 0; i < widget.listLink.length; i++) {
-      if (widget.listLink[i].contains('http')) {
-        urlSound = widget.listLink[i];
-      } else {
-        urlSound = '$kUrl/${widget.listLink[i]}';
-      }
+      urlSound = widget.listLink[i];
+
       playListChildren.add(
         AudioSource.uri(
           Uri.parse(urlSound),

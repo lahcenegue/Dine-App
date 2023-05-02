@@ -27,10 +27,14 @@ Widget screenPiker(ContentViewModel contentViewModel) {
   if (type.contains('Mp3') && type.contains('Mp4')) {
     return Mp3Mp4Player(
       title: contentViewModel.name,
+      id: contentViewModel.id,
+      videoUrls: contentViewModel.listLinks!,
     );
   } else if (type.contains('Mp3') && type.contains('Youtube')) {
     return Mp3Mp4Player(
       title: contentViewModel.name,
+      id: contentViewModel.id,
+      videoUrls: contentViewModel.listLinks!,
     );
   } else if (type.contains('Mp3')) {
     return AudioPlayerScreen(
