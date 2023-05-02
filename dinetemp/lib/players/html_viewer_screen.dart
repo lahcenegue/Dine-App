@@ -23,32 +23,6 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
-          actions: [
-            IconButton(
-              onPressed: () {
-                setState(
-                  () {
-                    fontSize = fontSize + 2;
-                  },
-                );
-              },
-              icon: const Icon(Icons.zoom_in),
-            ),
-            IconButton(
-              onPressed: () {
-                setState(
-                  () {
-                    if (fontSize <= 18) {
-                      fontSize = 18;
-                    } else {
-                      fontSize = fontSize - 2;
-                    }
-                  },
-                );
-              },
-              icon: const Icon(Icons.zoom_out),
-            ),
-          ],
         ),
         body: SingleChildScrollView(
           child: Html(
@@ -62,6 +36,46 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
             },
           ),
         ),
+        floatingActionButton: Container(
+          width: 120,
+          decoration: BoxDecoration(
+            color: Colors.grey.withOpacity(0.4),
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(30),
+              topRight: Radius.circular(30),
+            ),
+          ),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              IconButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      fontSize = fontSize + 2;
+                    },
+                  );
+                },
+                icon: const Icon(Icons.zoom_in),
+              ),
+              IconButton(
+                onPressed: () {
+                  setState(
+                    () {
+                      if (fontSize <= 18) {
+                        fontSize = 18;
+                      } else {
+                        fontSize = fontSize - 2;
+                      }
+                    },
+                  );
+                },
+                icon: const Icon(Icons.zoom_out),
+              ),
+            ],
+          ),
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
     );
   }

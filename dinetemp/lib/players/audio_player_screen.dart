@@ -24,6 +24,7 @@ class AudioPlayerScreen extends StatefulWidget {
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   late AudioPlayer _audioPlayer;
+  List<AudioSource> playListChildren = [];
 
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
@@ -45,7 +46,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   }
 
   Future<void> _init() async {
-    List<AudioSource> playListChildren = [];
     String urlSound;
     for (int i = 0; i < widget.listLink.length; i++) {
       if (widget.listLink[i].contains('http')) {
@@ -143,7 +143,10 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                 },
               ),
               const SizedBox(height: 20),
-              Controls(audioPlayer: _audioPlayer),
+              Controls(
+                audioPlayer: _audioPlayer,
+                audioLength: playListChildren.length,
+              ),
             ],
           ),
         ),
@@ -153,9 +156,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 }
 
 class Controls extends StatelessWidget {
-  const Controls({super.key, required this.audioPlayer});
-
   final AudioPlayer audioPlayer;
+  final int audioLength;
+  const Controls({
+    super.key,
+    required this.audioPlayer,
+    required this.audioLength,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -165,7 +172,7 @@ class Controls extends StatelessWidget {
         IconButton(
           onPressed: audioPlayer.seekToNext,
           iconSize: 60,
-          color: audioPlayer.hasNext ? Colors.white : Colors.grey,
+          color: audioLength <= 1 ? Colors.grey[700] : Colors.white,
           icon: const Icon(Icons.skip_next_rounded),
         ),
         StreamBuilder<PlayerState>(
@@ -197,9 +204,12 @@ class Controls extends StatelessWidget {
           },
         ),
         IconButton(
-          onPressed: audioPlayer.seekToPrevious,
+          onPressed: () {
+            print(audioLength);
+          },
+          // onPressed: audioPlayer.seekToPrevious,
           iconSize: 60,
-          color: audioPlayer.hasPrevious ? Colors.white : Colors.grey,
+          color: audioLength <= 1 ? Colors.grey[700] : Colors.white,
           icon: const Icon(Icons.skip_previous_rounded),
         ),
       ],

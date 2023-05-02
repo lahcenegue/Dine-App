@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import '../constants/constants.dart';
 import '../players/audio_player_screen.dart';
+import '../players/images_screen.dart';
 import '../players/mp4_player.dart';
 import '../players/pdf_player_screen.dart';
 import '../players/youtube_player_screen.dart';
@@ -20,8 +22,21 @@ Widget screenPiker(ContentViewModel contentViewModel) {
     (element) => element.contains('mp4'),
   );
 
+  Iterable<String> image = contentViewModel.listLinks!.where(
+    (element) => element.contains('jpg'),
+  );
+
+  //images pages
+  if (image.isNotEmpty) {
+    print('===============image');
+    return ImagesScreen(
+      title: contentViewModel.name,
+      imagesLinks: contentViewModel.listLinks!,
+    );
+  }
+
   //mp3 pages
-  if (mp3.isNotEmpty) {
+  else if (mp3.isNotEmpty) {
     List<String> mp3Links = [];
     for (int i = 0; i < contentViewModel.listLinks!.length; i++) {
       if (contentViewModel.listLinks![i].contains('.mp3')) {

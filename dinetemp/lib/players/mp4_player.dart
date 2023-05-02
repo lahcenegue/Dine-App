@@ -37,12 +37,15 @@ class _Mp4PlayerScreenState extends State<Mp4PlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(widget.title),
+        ),
+        body: CustomVideoPlayer(
+            customVideoPlayerController: _customVideoPlayerController),
       ),
-      body: CustomVideoPlayer(
-          customVideoPlayerController: _customVideoPlayerController),
     );
   }
 }
