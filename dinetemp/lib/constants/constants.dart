@@ -4,10 +4,12 @@ import 'package:flutter/material.dart';
 String kAppName = 'الشيخ عبدالمحسن بن محمد الأحمد';
 
 //Links
-String kUrl = 'https://www.abdelmohsen.com';
+String kUrl = 'https://www.drosq8.com';
 
 //Colors
 MaterialColor kMainColor = Colors.red;
 
 //images
 String kLogo = 'assets/images/logo.png';
+String kSoundInage =
+    'https://as1.ftcdn.net/v2/jpg/00/85/61/98/1000_F_85619893_qcV9Vr8GQGGToKKozmKZlon9M1rNwWNd.jpg';

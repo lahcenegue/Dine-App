@@ -1,4 +1,4 @@
-import 'package:dinetemp/constants/conatant.dart';
+import 'package:dinetemp/constants/constants.dart';
 import 'package:dinetemp/screens/subcategorie_list.dart';
 import 'package:dinetemp/screens/submatters_list.dart';
 import 'package:dinetemp/view_model/home_view_model.dart';

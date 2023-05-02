@@ -1,12 +1,22 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
-import 'package:cached_network_image/cached_network_image.dart';
+// import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../constants/constants.dart';
+
 class AudioPlayerScreen extends StatefulWidget {
-  const AudioPlayerScreen({super.key});
+  final List<String> listLink;
+  final String id;
+  final String title;
+  const AudioPlayerScreen({
+    super.key,
+    required this.listLink,
+    required this.id,
+    required this.title,
+  });
 
   @override
   State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
@@ -14,29 +24,6 @@ class AudioPlayerScreen extends StatefulWidget {
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   late AudioPlayer _audioPlayer;
-
-  final _playList = ConcatenatingAudioSource(
-    children: [
-      AudioSource.uri(
-        Uri.parse('https://www.drosq8.com/upload3/drosq8--16808713511.mp3'),
-        tag: MediaItem(
-          id: '0',
-          title: 'sound 1 ',
-          artUri: Uri.parse(
-              'https://as1.ftcdn.net/v2/jpg/00/85/61/98/1000_F_85619893_qcV9Vr8GQGGToKKozmKZlon9M1rNwWNd.jpg'),
-        ),
-      ),
-      AudioSource.uri(
-        Uri.parse('https://www.drosq8.com/upload3/drosq8--16804611371.mp3'),
-        tag: MediaItem(
-          id: '1',
-          title: 'sound 2',
-          artUri: Uri.parse(
-              'https://as1.ftcdn.net/v2/jpg/00/85/61/98/1000_F_85619893_qcV9Vr8GQGGToKKozmKZlon9M1rNwWNd.jpg'),
-        ),
-      ),
-    ],
-  );
 
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
@@ -58,8 +45,31 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   }
 
   Future<void> _init() async {
+    List<AudioSource> playListChildren = [];
+    String urlSound;
+    for (int i = 0; i < widget.listLink.length; i++) {
+      if (widget.listLink[i].contains('http')) {
+        urlSound = widget.listLink[i];
+      } else {
+        urlSound = '$kUrl/${widget.listLink[i]}';
+      }
+      playListChildren.add(
+        AudioSource.uri(
+          Uri.parse(urlSound),
+          tag: MediaItem(
+            id: '${widget.id}$i',
+            title: widget.title,
+            artUri: Uri.parse(kSoundInage),
+          ),
+        ),
+      );
+    }
+
+    final playList = ConcatenatingAudioSource(
+      children: playListChildren,
+    );
     await _audioPlayer.setLoopMode(LoopMode.all);
-    await _audioPlayer.setAudioSource(_playList);
+    await _audioPlayer.setAudioSource(playList);
   }
 
   @override
@@ -70,65 +80,72 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      extendBody: true,
-      body: Container(
-        padding: const EdgeInsets.all(20),
-        height: double.infinity,
-        width: double.infinity,
-        decoration: const BoxDecoration(
-          gradient: LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [
-              Color(0xFF144771),
-              Color(0Xff071A2C),
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: const Color(0xFF144771),
+          elevation: 0,
+        ),
+        extendBody: true,
+        body: Container(
+          padding: const EdgeInsets.all(20),
+          height: double.infinity,
+          width: double.infinity,
+          decoration: const BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+              colors: [
+                Color(0xFF144771),
+                Color(0Xff071A2C),
+              ],
+            ),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              StreamBuilder(
+                stream: _audioPlayer.sequenceStateStream,
+                builder: (context, snapshot) {
+                  final state = snapshot.data;
+                  if (state?.sequence.isEmpty ?? true) {
+                    return const SizedBox();
+                  }
+                  final metadata = state!.currentSource!.tag as MediaItem;
+                  return MediaMetaData(
+                    imageUrl: metadata.artUri.toString(),
+                    artist: metadata.artist ?? '',
+                    title: metadata.title,
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              StreamBuilder(
+                stream: _positionDataStream,
+                builder: (context, snapshot) {
+                  final positionData = snapshot.data;
+                  return ProgressBar(
+                    barHeight: 8,
+                    baseBarColor: Colors.grey[600],
+                    bufferedBarColor: Colors.grey,
+                    progressBarColor: Colors.red,
+                    thumbColor: Colors.red,
+                    timeLabelTextStyle: const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    progress: positionData?.position ?? Duration.zero,
+                    buffered: positionData?.bufferedPosition ?? Duration.zero,
+                    total: positionData?.duration ?? Duration.zero,
+                    onSeek: _audioPlayer.seek,
+                  );
+                },
+              ),
+              const SizedBox(height: 20),
+              Controls(audioPlayer: _audioPlayer),
             ],
           ),
-        ),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            StreamBuilder(
-              stream: _audioPlayer.sequenceStateStream,
-              builder: (context, snapshot) {
-                final state = snapshot.data;
-                if (state?.sequence.isEmpty ?? true) {
-                  return const SizedBox();
-                }
-                final metadata = state!.currentSource!.tag as MediaItem;
-                return MediaMetaData(
-                  imageUrl: metadata.artUri.toString(),
-                  artist: metadata.artist ?? '',
-                  title: metadata.title,
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            StreamBuilder(
-              stream: _positionDataStream,
-              builder: (context, snapshot) {
-                final positionData = snapshot.data;
-                return ProgressBar(
-                  barHeight: 8,
-                  baseBarColor: Colors.grey[600],
-                  bufferedBarColor: Colors.grey,
-                  progressBarColor: Colors.red,
-                  thumbColor: Colors.red,
-                  timeLabelTextStyle: const TextStyle(
-                    color: Colors.white,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  progress: positionData?.position ?? Duration.zero,
-                  buffered: positionData?.bufferedPosition ?? Duration.zero,
-                  total: positionData?.duration ?? Duration.zero,
-                  onSeek: _audioPlayer.seek,
-                );
-              },
-            ),
-            const SizedBox(height: 20),
-            Controls(audioPlayer: _audioPlayer),
-          ],
         ),
       ),
     );
@@ -146,10 +163,10 @@ class Controls extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         IconButton(
-          onPressed: audioPlayer.seekToPrevious,
+          onPressed: audioPlayer.seekToNext,
           iconSize: 60,
-          color: Colors.white,
-          icon: const Icon(Icons.skip_previous_rounded),
+          color: audioPlayer.hasNext ? Colors.white : Colors.grey,
+          icon: const Icon(Icons.skip_next_rounded),
         ),
         StreamBuilder<PlayerState>(
           stream: audioPlayer.playerStateStream,
@@ -180,10 +197,10 @@ class Controls extends StatelessWidget {
           },
         ),
         IconButton(
-          onPressed: audioPlayer.seekToNext,
+          onPressed: audioPlayer.seekToPrevious,
           iconSize: 60,
-          color: Colors.white,
-          icon: const Icon(Icons.skip_next_rounded),
+          color: audioPlayer.hasPrevious ? Colors.white : Colors.grey,
+          icon: const Icon(Icons.skip_previous_rounded),
         ),
       ],
     );
@@ -229,8 +246,8 @@ class MediaMetaData extends StatelessWidget {
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(10),
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
+            child: Image.network(
+              imageUrl,
               height: 300,
               width: 300,
               fit: BoxFit.cover,

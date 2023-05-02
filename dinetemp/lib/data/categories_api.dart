@@ -1,5 +1,5 @@
 import 'dart:convert' as convert;
-import 'package:dinetemp/constants/conatant.dart';
+import 'package:dinetemp/constants/constants.dart';
 import 'package:dinetemp/models/categories_model.dart';
 import 'package:http/http.dart' as http;
 

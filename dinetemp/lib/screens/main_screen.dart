@@ -1,4 +1,4 @@
-import 'package:dinetemp/constants/conatant.dart';
+import 'package:dinetemp/constants/constants.dart';
 import 'package:dinetemp/screens/categories_list.dart';
 import 'package:flutter/material.dart';
 

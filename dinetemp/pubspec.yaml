@@ -28,9 +28,10 @@ environment:
 # the latest version available on pub.dev. To see which dependencies have newer
 # versions available, run `flutter pub outdated`.
 dependencies:
+  appinio_video_player: ^1.2.1
   audio_session: ^0.1.13
   audio_video_progress_bar: ^1.0.1
-  cached_network_image: ^3.2.3
+  chewie: ^1.4.0
   cupertino_icons: ^1.0.2
   flutter:
     sdk: flutter
@@ -39,6 +40,8 @@ dependencies:
   just_audio: ^0.9.32
   just_audio_background: ^0.0.1-beta.7
   rxdart: ^0.27.7
+  video_player: ^2.6.1
+  youtube_player_flutter: ^8.1.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0

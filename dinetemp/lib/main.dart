@@ -1,4 +1,4 @@
-import 'package:dinetemp/constants/conatant.dart';
+import 'package:dinetemp/constants/constants.dart';
 import 'package:dinetemp/screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../players/audio_player_screen.dart';
 import '../players/html_viewer_screen.dart';
+import '../widgets/screen_picker.dart';
 
 class ContentScreen extends StatefulWidget {
   final SubMatterViewModel subMatterViewModel;
@@ -30,26 +31,23 @@ class _ContentScreenState extends State<ContentScreen> {
       setState(() {});
     });
 
-    return Directionality(
-      textDirection: TextDirection.rtl,
-      child: Scaffold(
-        body: hvm.contentData == null
-            ? const Center(
-                child: CircularProgressIndicator(),
-              )
-            : hvm.contentData!.listLinks!.isEmpty
-                ? HtmlViwerScreen(
-                    title: hvm.contentData!.name,
-                    text: hvm.contentData!.comment,
-                  )
-                : Center(
-                    child: Column(
-                      children: [
-                        Text(hvm.contentData!.listLinks![0]),
-                      ],
-                    ),
-                  ),
-      ),
-    );
+    if (hvm.contentData == null) {
+      return const Scaffold(
+        body: Center(
+          child: CircularProgressIndicator(),
+        ),
+      );
+    } else if (hvm.contentData!.listLinks!.isEmpty) {
+      return Scaffold(
+        body: HtmlViwerScreen(
+          title: hvm.contentData!.name,
+          text: hvm.contentData!.comment,
+        ),
+      );
+    } else {
+      return Scaffold(
+        body: screenPiker(hvm.contentData!),
+      );
+    }
   }
 }
