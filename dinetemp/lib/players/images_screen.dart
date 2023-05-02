@@ -48,7 +48,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
                     Center(
                       child: Icon(
                         Icons.error,
-                        size: 40,
+                        size: 80,
                         color: Colors.red,
                       ),
                     ),

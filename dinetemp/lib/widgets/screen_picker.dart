@@ -1,77 +1,62 @@
 import 'package:flutter/material.dart';
-import '../constants/constants.dart';
 import '../players/audio_player_screen.dart';
 import '../players/images_screen.dart';
+import '../players/mp3_mp4_player.dart';
 import '../players/mp4_player.dart';
 import '../players/pdf_player_screen.dart';
 import '../players/youtube_player_screen.dart';
 import '../view_model/content_view_model.dart';
 
 Widget screenPiker(ContentViewModel contentViewModel) {
-  //get type info
-  Iterable<String> mp3 = contentViewModel.listLinks!.where(
-    (element) => element.contains('mp3'),
-  );
-  Iterable<String> pdf = contentViewModel.listLinks!.where(
-    (element) => element.contains('pdf'),
-  );
-  Iterable<String> youtube = contentViewModel.listLinks!.where(
-    (element) => element.contains('youtube'),
-  );
-  Iterable<String> mp4 = contentViewModel.listLinks!.where(
-    (element) => element.contains('mp4'),
-  );
+  List<String> type = [];
 
-  Iterable<String> image = contentViewModel.listLinks!.where(
-    (element) => element.contains('jpg'),
-  );
-
-  //images pages
-  if (image.isNotEmpty) {
-    print('===============image');
-    return ImagesScreen(
-      title: contentViewModel.name,
-      imagesLinks: contentViewModel.listLinks!,
-    );
+  for (int i = 0; i < contentViewModel.listLinks!.length; i++) {
+    if (contentViewModel.listLinks![i].contains('mp3')) {
+      type.add('Mp3');
+    } else if (contentViewModel.listLinks![i].contains('mp4')) {
+      type.add('Mp4');
+    } else if (contentViewModel.listLinks![i].contains('youtube')) {
+      type.add('Youtube');
+    } else if (contentViewModel.listLinks![i].contains('pdf')) {
+      type.add('PDF');
+    } else {
+      type.add('Image');
+    }
   }
 
-  //mp3 pages
-  else if (mp3.isNotEmpty) {
-    List<String> mp3Links = [];
-    for (int i = 0; i < contentViewModel.listLinks!.length; i++) {
-      if (contentViewModel.listLinks![i].contains('.mp3')) {
-        mp3Links.add(contentViewModel.listLinks![i]);
-      }
-    }
-
+  if (type.contains('Mp3') && type.contains('Mp4')) {
+    return Mp3Mp4Player(
+      title: contentViewModel.name,
+    );
+  } else if (type.contains('Mp3') && type.contains('Youtube')) {
+    return Mp3Mp4Player(
+      title: contentViewModel.name,
+    );
+  } else if (type.contains('Mp3')) {
     return AudioPlayerScreen(
-      listLink: mp3Links,
+      listLink: contentViewModel.listLinks!,
       id: contentViewModel.id,
       title: contentViewModel.name,
     );
-  }
-
-  //pdf pages
-  else if (pdf.isNotEmpty) {
-    return PdfPlayerScreen(
-      link: contentViewModel.listLinks!.first,
+  } else if (type.contains('Mp4')) {
+    return Mp4PlayerScreen(
+      videoUrl: contentViewModel.listLinks!.first,
       title: contentViewModel.name,
     );
-  }
-
-  //youtube pages
-  else if (youtube.isNotEmpty) {
+  } else if (type.contains('Youtube')) {
     return YoutubeVideoPlayerScreen(
       videoUrl: contentViewModel.listLinks!.first,
       title: contentViewModel.name,
     );
-  }
-
-  //mp4 pages
-  else if (mp4.isNotEmpty) {
-    return Mp4PlayerScreen(
-      videoUrl: contentViewModel.listLinks!.first,
+  } else if (type.contains('PDF')) {
+    return PdfPlayerScreen(
+      link: contentViewModel.listLinks!.first,
       title: contentViewModel.name,
+    );
+  } else if (type.contains('Image')) {
+    return ImagesScreen(
+      title: contentViewModel.name,
+      imagesLinks: contentViewModel.listLinks!,
     );
   }
 
