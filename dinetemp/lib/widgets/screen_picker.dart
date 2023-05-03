@@ -4,6 +4,7 @@ import '../players/images_screen.dart';
 import '../players/mp3_mp4_player.dart';
 import '../players/mp4_player.dart';
 import '../players/pdf_player_screen.dart';
+import '../players/youtube_mp3_player.dart';
 import '../players/youtube_player_screen.dart';
 import '../view_model/content_view_model.dart';
 
@@ -31,7 +32,7 @@ Widget screenPiker(ContentViewModel contentViewModel) {
       videoUrls: contentViewModel.listLinks!,
     );
   } else if (type.contains('Mp3') && type.contains('Youtube')) {
-    return Mp3Mp4Player(
+    return YoutubeMp3Player(
       title: contentViewModel.name,
       id: contentViewModel.id,
       videoUrls: contentViewModel.listLinks!,

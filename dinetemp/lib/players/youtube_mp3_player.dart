@@ -1,5 +1,6 @@
-import 'package:appinio_video_player/appinio_video_player.dart';
-import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
+import 'package:flutter/services.dart';
+import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart' as bar;
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
@@ -7,12 +8,12 @@ import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
 import 'audio_player_screen.dart';
 
-class Mp3Mp4Player extends StatefulWidget {
+class YoutubeMp3Player extends StatefulWidget {
   final String title;
   final String id;
   final List<String> videoUrls;
 
-  const Mp3Mp4Player({
+  const YoutubeMp3Player({
     super.key,
     required this.title,
     required this.id,
@@ -20,16 +21,15 @@ class Mp3Mp4Player extends StatefulWidget {
   });
 
   @override
-  State<Mp3Mp4Player> createState() => _Mp3Mp4PlayerState();
+  State<YoutubeMp3Player> createState() => _YoutubeMp3PlayerState();
 }
 
-class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
-  late VideoPlayerController videoPlayerController;
-  late CustomVideoPlayerController _customVideoPlayerController;
+class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
+  //Audio part
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
   late String mp3Link;
-  late String mp4Link;
+
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
         _audioPlayer.positionStream,
@@ -58,32 +58,49 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
     await _audioPlayer.setAudioSource(playList);
   }
 
+  //Youtube Part
+  late YoutubePlayerController _youtubePlayerController;
+  late String youtubeLink;
+
   @override
   void initState() {
     super.initState();
-    //mp4Link = widget.videoUrls.where((element) => element == '.mp4').toString();
+    // youtubeLink =
+    //     widget.videoUrls.where((element) => element == 'youtube').toString();
     for (int i = 0; i < widget.videoUrls.length; i++) {
       if (widget.videoUrls[i].contains('.mp3')) {
         mp3Link = widget.videoUrls[i];
       } else {
-        mp4Link = widget.videoUrls[i];
+        youtubeLink = widget.videoUrls[i];
       }
     }
     _audioPlayer = AudioPlayer();
     _init();
-    videoPlayerController = VideoPlayerController.network(mp4Link)
-      ..initialize().then((value) => setState(() {}));
-    _customVideoPlayerController = CustomVideoPlayerController(
-      context: context,
-      videoPlayerController: videoPlayerController,
+    _youtubePlayerController = YoutubePlayerController(
+      initialVideoId: YoutubePlayer.convertUrlToId(youtubeLink)!,
+      flags: const YoutubePlayerFlags(
+        mute: false,
+        autoPlay: false,
+        disableDragSeek: false,
+        loop: false,
+        isLive: false,
+        forceHD: false,
+        enableCaption: true,
+      ),
     );
   }
 
   @override
   void dispose() {
-    _customVideoPlayerController.dispose();
     _audioPlayer.dispose();
+    _youtubePlayerController.dispose();
     super.dispose();
+  }
+
+  @override
+  void deactivate() {
+    _youtubePlayerController.pause();
+    super.deactivate();
   }
 
   @override
@@ -97,9 +114,37 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
+            //////////// youtube
             Expanded(
-              child: CustomVideoPlayer(
-                  customVideoPlayerController: _customVideoPlayerController),
+              child: YoutubePlayerBuilder(
+                onExitFullScreen: () {
+                  SystemChrome.setPreferredOrientations(
+                      DeviceOrientation.values);
+                },
+                player: YoutubePlayer(
+                  aspectRatio: 16 / 9,
+                  controller: _youtubePlayerController,
+                  showVideoProgressIndicator: true,
+                  progressIndicatorColor: kMainColor,
+                  bottomActions: [
+                    CurrentPosition(),
+                    ProgressBar(
+                      isExpanded: true,
+                      colors: const ProgressBarColors(
+                        playedColor: Colors.red,
+                        handleColor: Colors.red,
+                        backgroundColor: Colors.grey,
+                        bufferedColor: Colors.white,
+                      ),
+                    ),
+                    RemainingDuration(),
+                    FullScreenButton(),
+                  ],
+                ),
+                builder: (context, player) {
+                  return player;
+                },
+              ),
             ),
             const SizedBox(height: 50),
             Container(
@@ -121,7 +166,7 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
                     stream: _positionDataStream,
                     builder: (context, snapshot) {
                       final positionData = snapshot.data;
-                      return ProgressBar(
+                      return bar.ProgressBar(
                         barHeight: 5,
                         baseBarColor: Colors.grey[600],
                         bufferedBarColor: Colors.grey,

@@ -80,7 +80,16 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
       textDirection: TextDirection.rtl,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: const Color(0xFF144771),
+          title: Text(
+            widget.title,
+            style: const TextStyle(
+              color: Colors.white,
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+            ),
+            textAlign: TextAlign.center,
+          ),
+          backgroundColor: kGradianColor1,
           elevation: 0,
         ),
         extendBody: true,
@@ -258,16 +267,6 @@ class MediaMetaData extends StatelessWidget {
           ),
         ),
         const SizedBox(height: 20),
-        Text(
-          title,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-          ),
-          textAlign: TextAlign.center,
-        ),
-        const SizedBox(height: 8),
         Text(
           artist,
           style: const TextStyle(
