@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
-
 import '../constants/constants.dart';
 
 class YoutubeVideoPlayerScreen extends StatefulWidget {

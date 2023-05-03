@@ -1,7 +1,7 @@
-import 'package:dinetemp/view_model/home_view_model.dart';
-import 'package:dinetemp/view_model/subcategories_view_model.dart';
 import 'package:flutter/material.dart';
 import '../players/html_viewer_screen.dart';
+import '../view_model/home_view_model.dart';
+import '../view_model/subcategories_view_model.dart';
 import '../widgets/screen_picker.dart';
 
 class ContentScreen extends StatefulWidget {

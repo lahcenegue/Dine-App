@@ -1,6 +1,6 @@
-import 'package:dinetemp/screens/categorie_detail.dart';
-import 'package:dinetemp/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
+import '../view_model/home_view_model.dart';
+import 'categorie_detail.dart';
 
 class SubCategoriesList extends StatefulWidget {
   final String catId;

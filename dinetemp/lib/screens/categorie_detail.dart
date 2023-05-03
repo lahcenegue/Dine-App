@@ -1,8 +1,8 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/screens/subcategorie_list.dart';
-import 'package:dinetemp/screens/submatters_list.dart';
-import 'package:dinetemp/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
+import '../constants/constants.dart';
+import '../view_model/home_view_model.dart';
+import 'subcategorie_list.dart';
+import 'submatters_list.dart';
 
 class CategorieDetail extends StatefulWidget {
   final String catId;

@@ -1,4 +1,4 @@
-import 'package:dinetemp/models/categories_model.dart';
+import '../models/categories_model.dart';
 
 class CategoriesViewModel {
   final CategoriesModel _categories;

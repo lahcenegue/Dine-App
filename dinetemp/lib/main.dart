@@ -1,5 +1,5 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/screens/main_screen.dart';
+import '../constants/constants.dart';
+import '../screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 
@@ -20,7 +20,6 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        //useMaterial3: true,
         primarySwatch: kMainColor,
       ),
       home: const MainScreen(),

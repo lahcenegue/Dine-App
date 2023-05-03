@@ -1,7 +1,7 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/models/content_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../constants/constants.dart';
+import '../models/content_model.dart';
 
 class ContentApi {
   String catId;

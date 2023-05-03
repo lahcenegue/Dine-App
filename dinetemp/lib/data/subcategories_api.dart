@@ -1,7 +1,7 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/models/subcategories_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert' as convert;
+import '../constants/constants.dart';
+import '../models/subcategories_model.dart';
 
 class SubCategoriesApi {
   String catId;

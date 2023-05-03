@@ -1,6 +1,7 @@
-import 'package:dinetemp/screens/content_screen.dart';
-import 'package:dinetemp/view_model/home_view_model.dart';
 import 'package:flutter/material.dart';
+
+import '../view_model/home_view_model.dart';
+import 'content_screen.dart';
 
 class SubMattersList extends StatefulWidget {
   final String catId;

@@ -1,4 +1,4 @@
-import 'package:dinetemp/models/subcategories_model.dart';
+import '../models/subcategories_model.dart';
 
 class SubCategoriesViewModel {
   final SubCategoriesModel _subcategories;

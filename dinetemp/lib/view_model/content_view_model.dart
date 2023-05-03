@@ -1,5 +1,5 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/models/content_model.dart';
+import '../constants/constants.dart';
+import '../models/content_model.dart';
 
 class ContentViewModel {
   final ContentModel _contentModel;

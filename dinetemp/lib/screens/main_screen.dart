@@ -1,6 +1,6 @@
-import 'package:dinetemp/constants/constants.dart';
-import 'package:dinetemp/screens/categories_list.dart';
 import 'package:flutter/material.dart';
+import '../constants/constants.dart';
+import 'categories_list.dart';
 
 class MainScreen extends StatelessWidget {
   const MainScreen({super.key});

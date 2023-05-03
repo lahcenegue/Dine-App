@@ -1,7 +1,7 @@
 import 'package:flutter/services.dart';
+import 'package:flutter/material.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart' as bar;
-import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
