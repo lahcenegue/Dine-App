@@ -88,13 +88,13 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           padding: const EdgeInsets.all(20),
           height: double.infinity,
           width: double.infinity,
-          decoration: const BoxDecoration(
+          decoration: BoxDecoration(
             gradient: LinearGradient(
               begin: Alignment.topCenter,
               end: Alignment.bottomCenter,
               colors: [
-                Color(0xFF144771),
-                Color(0Xff071A2C),
+                kGradianColor1,
+                kGradianColor2,
               ],
             ),
           ),

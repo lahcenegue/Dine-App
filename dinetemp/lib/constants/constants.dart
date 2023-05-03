@@ -8,6 +8,8 @@ String kUrl = 'https://www.shanqiti.com/';
 
 //Colors
 MaterialColor kMainColor = Colors.red;
+Color kGradianColor1 = const Color(0xFF144771);
+Color kGradianColor2 = const Color(0Xff071A2C);
 
 //images
 String kLogo = 'assets/images/logo.png';

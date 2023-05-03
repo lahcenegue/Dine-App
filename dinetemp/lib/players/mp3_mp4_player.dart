@@ -94,15 +94,26 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
         appBar: AppBar(
           title: Text(widget.title),
         ),
-        body: ListView(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Expanded(
               child: CustomVideoPlayer(
                   customVideoPlayerController: _customVideoPlayerController),
             ),
-            const SizedBox(height: 20),
-            Padding(
+            const SizedBox(height: 50),
+            Container(
               padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    kGradianColor1,
+                    kGradianColor2,
+                  ],
+                ),
+              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
