@@ -21,6 +21,13 @@ class _CategoriesListState extends State<CategoriesList> {
     hvm.fetchCategoriesList();
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   Future refreshData() async {
     await Future.delayed(const Duration(seconds: 2));
     hvm.fetchCategoriesList();

@@ -1,53 +1,40 @@
 import 'package:flutter/material.dart';
 
-import '../view_model/home_view_model.dart';
+import '../data/sqldb.dart';
 import 'content_screen.dart';
+import 'submatters_list.dart';
 
-class SubMattersList extends StatefulWidget {
-  final String catId;
-  final String catName;
-  const SubMattersList({
-    super.key,
-    required this.catId,
-    required this.catName,
-  });
+class FavoriteScreen extends StatefulWidget {
+  const FavoriteScreen({super.key});
 
   @override
-  State<SubMattersList> createState() => _SubMattersListState();
+  State<FavoriteScreen> createState() => _FavoriteScreenState();
 }
 
-class _SubMattersListState extends State<SubMattersList> {
-  final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      GlobalKey<RefreshIndicatorState>();
-  HomeViewModel hvm = HomeViewModel();
-  @override
-  void initState() {
-    super.initState();
-    hvm.fetchSubMatterList(widget.catId);
-  }
+class _FavoriteScreenState extends State<FavoriteScreen> {
+  SqlDb sqlDb = SqlDb();
 
-  Future refreshData() async {
-    await Future.delayed(const Duration(seconds: 2));
-    hvm.fetchSubMatterList(widget.catId);
-    setState(() {});
+  Future<List<Map>> readData() async {
+    List<Map> response = await sqlDb.readData("SELECT * FROM contentmodel");
+    return response;
   }
 
   @override
   Widget build(BuildContext context) {
-    hvm.addListener(() {
-      setState(() {});
-    });
-
-    return hvm.listSubMatter == null
-        ? const Center(
-            child: CircularProgressIndicator(),
-          )
-        : RefreshIndicator(
-            key: _refreshIndicatorKey,
-            onRefresh: refreshData,
-            child: ListView.builder(
-              itemCount: hvm.listSubMatter!.length,
-              itemBuilder: (buildContext, index) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('المفضلة'),
+      ),
+      body: FutureBuilder(
+        future: readData(),
+        builder: (BuildContext context, AsyncSnapshot<List<Map>> snapshot) {
+          if (snapshot.hasData) {
+            return ListView.separated(
+              itemCount: snapshot.data!.length,
+              separatorBuilder: ((context, index) {
+                return const SizedBox(height: 30);
+              }),
+              itemBuilder: (context, index) {
                 return Container(
                   margin: const EdgeInsets.only(
                     right: 25,
@@ -68,7 +55,7 @@ class _SubMattersListState extends State<SubMattersList> {
                   ),
                   child: ListTile(
                     title: Text(
-                      hvm.listSubMatter![index].name,
+                      snapshot.data![index]['name'],
                       overflow: TextOverflow.ellipsis,
                       style: const TextStyle(
                         fontSize: 16,
@@ -81,7 +68,7 @@ class _SubMattersListState extends State<SubMattersList> {
                         context,
                         MaterialPageRoute(
                           builder: (context) => ContentScreen(
-                            id: hvm.listSubMatter![index].id,
+                            id: snapshot.data![index]['id_content'],
                           ),
                         ),
                       );
@@ -89,7 +76,13 @@ class _SubMattersListState extends State<SubMattersList> {
                   ),
                 );
               },
-            ),
+            );
+          }
+          return const Center(
+            child: CircularProgressIndicator(),
           );
+        },
+      ),
+    );
   }
 }

@@ -5,10 +5,10 @@ import '../view_model/subcategories_view_model.dart';
 import '../widgets/screen_picker.dart';
 
 class ContentScreen extends StatefulWidget {
-  final SubMatterViewModel subMatterViewModel;
+  final String id;
   const ContentScreen({
     super.key,
-    required this.subMatterViewModel,
+    required this.id,
   });
 
   @override
@@ -20,7 +20,7 @@ class _ContentScreenState extends State<ContentScreen> {
   @override
   void initState() {
     super.initState();
-    hvm.fetchContentData(widget.subMatterViewModel.id);
+    hvm.fetchContentData(widget.id);
   }
 
   @override
@@ -33,13 +33,6 @@ class _ContentScreenState extends State<ContentScreen> {
       return const Scaffold(
         body: Center(
           child: CircularProgressIndicator(),
-        ),
-      );
-    } else if (hvm.contentData!.listLinks!.isEmpty) {
-      return Scaffold(
-        body: HtmlViwerScreen(
-          title: hvm.contentData!.name,
-          text: hvm.contentData!.comment,
         ),
       );
     } else {

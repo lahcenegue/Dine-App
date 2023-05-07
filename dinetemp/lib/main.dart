@@ -1,7 +1,7 @@
 import '../constants/constants.dart';
-import '../screens/main_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
+import 'screens/navigation_screen.dart';
 
 Future<void> main() async {
   await JustAudioBackground.init(
@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: kMainColor,
       ),
-      home: const MainScreen(),
+      home: const NavigationScreen(),
     );
   }
 }
