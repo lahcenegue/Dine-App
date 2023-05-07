@@ -55,21 +55,25 @@ Widget screenPiker(ContentViewModel contentViewModel) {
       return Mp4PlayerScreen(
         videoUrl: contentViewModel.listLinks!.first,
         title: contentViewModel.name,
+        id: contentViewModel.id,
       );
     } else if (type.contains('Youtube')) {
       return YoutubeVideoPlayerScreen(
         videoUrl: contentViewModel.listLinks!.first,
         title: contentViewModel.name,
+        id: contentViewModel.id,
       );
     } else if (type.contains('PDF')) {
       return PdfPlayerScreen(
         link: contentViewModel.listLinks!.first,
         title: contentViewModel.name,
+        id: contentViewModel.id,
       );
     } else if (type.contains('Image')) {
       return ImagesScreen(
         title: contentViewModel.name,
         imagesLinks: contentViewModel.listLinks!,
+        id: contentViewModel.id,
       );
     }
 

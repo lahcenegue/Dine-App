@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-
 import '../data/sqldb.dart';
-import '../view_model/content_view_model.dart';
 
 class HtmlViwerScreen extends StatefulWidget {
   final String title;

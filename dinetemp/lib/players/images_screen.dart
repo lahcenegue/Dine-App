@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
+import '../data/sqldb.dart';
+
 class ImagesScreen extends StatefulWidget {
   final String title;
   final List<String> imagesLinks;
+  final String id;
   const ImagesScreen({
     super.key,
     required this.title,
     required this.imagesLinks,
+    required this.id,
   });
 
   @override
@@ -14,6 +18,8 @@ class ImagesScreen extends StatefulWidget {
 }
 
 class _ImagesScreenState extends State<ImagesScreen> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -21,6 +27,26 @@ class _ImagesScreenState extends State<ImagesScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
+            ),
+          ],
         ),
         body: ListView.separated(
           padding: const EdgeInsets.all(10),

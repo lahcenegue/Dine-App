@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-
 import '../data/sqldb.dart';
 import 'content_screen.dart';
-import 'submatters_list.dart';
 
 class FavoriteScreen extends StatefulWidget {
   const FavoriteScreen({super.key});
@@ -32,7 +30,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
             return ListView.separated(
               itemCount: snapshot.data!.length,
               separatorBuilder: ((context, index) {
-                return const SizedBox(height: 30);
+                return const SizedBox(height: 08);
               }),
               itemBuilder: (context, index) {
                 return Container(

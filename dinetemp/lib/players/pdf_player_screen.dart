@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
+import '../data/sqldb.dart';
+
 class PdfPlayerScreen extends StatefulWidget {
   final String link;
   final String title;
+  final String id;
   const PdfPlayerScreen({
     super.key,
     required this.link,
     required this.title,
+    required this.id,
   });
 
   @override
@@ -15,6 +19,8 @@ class PdfPlayerScreen extends StatefulWidget {
 }
 
 class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   PdfViewerController pdfViewerController = PdfViewerController();
   TextEditingController textEditingController = TextEditingController();
   double zoom = 1.0;
@@ -65,6 +71,24 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
                 searchWord(context);
               },
               icon: const Icon(Icons.search),
+            ),
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
             ),
           ],
         ),

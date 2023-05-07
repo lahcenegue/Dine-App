@@ -6,6 +6,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
+import '../data/sqldb.dart';
 import 'audio_player_screen.dart';
 
 class YoutubeMp3Player extends StatefulWidget {
@@ -25,6 +26,8 @@ class YoutubeMp3Player extends StatefulWidget {
 }
 
 class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   //Audio part
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
@@ -110,6 +113,26 @@ class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
+            ),
+          ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

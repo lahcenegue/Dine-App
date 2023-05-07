@@ -5,6 +5,7 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 
 import '../constants/constants.dart';
+import '../data/sqldb.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final List<String> listLink;
@@ -22,6 +23,8 @@ class AudioPlayerScreen extends StatefulWidget {
 }
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
 
@@ -89,6 +92,26 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             ),
             textAlign: TextAlign.center,
           ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
+            ),
+          ],
           backgroundColor: kGradianColor1,
           elevation: 0,
         ),

@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
+import '../data/sqldb.dart';
 import 'audio_player_screen.dart';
 
 class Mp3Mp4Player extends StatefulWidget {
@@ -24,6 +25,8 @@ class Mp3Mp4Player extends StatefulWidget {
 }
 
 class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   late VideoPlayerController videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
   late AudioPlayer _audioPlayer;
@@ -93,6 +96,26 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
+            ),
+          ],
         ),
         body: Column(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

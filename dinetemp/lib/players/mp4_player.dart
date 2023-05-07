@@ -1,13 +1,17 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 
+import '../data/sqldb.dart';
+
 class Mp4PlayerScreen extends StatefulWidget {
   final String videoUrl;
+  final String id;
   final String title;
   const Mp4PlayerScreen({
     super.key,
     required this.videoUrl,
     required this.title,
+    required this.id,
   });
 
   @override
@@ -15,6 +19,8 @@ class Mp4PlayerScreen extends StatefulWidget {
 }
 
 class _Mp4PlayerScreenState extends State<Mp4PlayerScreen> {
+  SqlDb sqlDb = SqlDb();
+  bool isFavorite = false;
   late VideoPlayerController videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
 
@@ -42,6 +48,26 @@ class _Mp4PlayerScreenState extends State<Mp4PlayerScreen> {
       child: Scaffold(
         appBar: AppBar(
           title: Text(widget.title),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                int response = await sqlDb.insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("${widget.id}", "${widget.title}")
+                                      ''');
+                print('persson=======================$response');
+                if (response > 0) {
+                  print('isFavorit===============');
+                  setState(() {
+                    isFavorite = true;
+                  });
+                }
+              },
+              icon: const Icon(
+                Icons.favorite_rounded,
+              ),
+            ),
+          ],
         ),
         body: CustomVideoPlayer(
             customVideoPlayerController: _customVideoPlayerController),
