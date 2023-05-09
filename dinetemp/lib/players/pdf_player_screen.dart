@@ -20,10 +20,26 @@ class PdfPlayerScreen extends StatefulWidget {
 
 class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
   SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
+  bool? isFavorite;
   PdfViewerController pdfViewerController = PdfViewerController();
   TextEditingController textEditingController = TextEditingController();
   double zoom = 1.0;
+
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
 
   searchWord(BuildContext context) {
     showDialog(
@@ -56,6 +72,12 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
         );
       },
     );
+  }
+
+  @override
+  void initState() {
+    checkFavorite();
+    super.initState();
   }
 
   @override

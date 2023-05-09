@@ -26,7 +26,8 @@ class Mp3Mp4Player extends StatefulWidget {
 
 class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
   SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
+  bool? isFavorite;
+
   late VideoPlayerController videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
   late AudioPlayer _audioPlayer;
@@ -61,10 +62,26 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
     await _audioPlayer.setAudioSource(playList);
   }
 
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
+
   @override
   void initState() {
     super.initState();
-    //mp4Link = widget.videoUrls.where((element) => element == '.mp4').toString();
+    checkFavorite();
     for (int i = 0; i < widget.videoUrls.length; i++) {
       if (widget.videoUrls[i].contains('.mp3')) {
         mp3Link = widget.videoUrls[i];

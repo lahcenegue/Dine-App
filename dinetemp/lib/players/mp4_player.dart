@@ -20,13 +20,29 @@ class Mp4PlayerScreen extends StatefulWidget {
 
 class _Mp4PlayerScreenState extends State<Mp4PlayerScreen> {
   SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
+  bool? isFavorite;
   late VideoPlayerController videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
 
   @override
   void initState() {
     super.initState();
+    checkFavorite();
     videoPlayerController = VideoPlayerController.network(widget.videoUrl)
       ..initialize().then((value) => setState(() {}));
     _customVideoPlayerController = CustomVideoPlayerController(

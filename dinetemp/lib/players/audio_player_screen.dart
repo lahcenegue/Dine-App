@@ -24,9 +24,26 @@ class AudioPlayerScreen extends StatefulWidget {
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
+
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
+  bool? isFavorite;
+
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
 
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
@@ -43,6 +60,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
+    checkFavorite();
     _audioPlayer = AudioPlayer();
     _init();
   }

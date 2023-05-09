@@ -19,7 +19,30 @@ class ImagesScreen extends StatefulWidget {
 
 class _ImagesScreenState extends State<ImagesScreen> {
   SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
+  bool? isFavorite;
+
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
+
+  @override
+  void initState() {
+    checkFavorite();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(

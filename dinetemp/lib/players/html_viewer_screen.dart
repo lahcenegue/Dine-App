@@ -21,6 +21,41 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
   SqlDb sqlDb = SqlDb();
   double fontSize = 18;
   bool isFavorite = false;
+
+  Future<List<Map>> checkFavorite() async {
+    List<Map> response = await sqlDb
+        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
+
+    if (response.isEmpty) {
+      setState(() {
+        isFavorite = false;
+      });
+    } else {
+      setState(() {
+        isFavorite = true;
+      });
+    }
+    return response;
+  }
+
+  Future<int> deleteData() async {
+    int delete = await sqlDb
+        .deleteData("DELETE FROM contentmodel WHERE id_content= ${widget.id}");
+    print('=============$delete==================');
+    if (delete == 1) {
+      setState(() {
+        isFavorite = false;
+      });
+    }
+    return delete;
+  }
+
+  @override
+  void initState() {
+    checkFavorite();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -31,20 +66,25 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
           actions: [
             IconButton(
               onPressed: () async {
-                int response = await sqlDb.insertData('''
+                if (isFavorite == false) {
+                  int response = await sqlDb.insertData('''
                                      INSERT INTO contentmodel ("id_content" , "name")
                                      VALUES ("${widget.id}", "${widget.title}")
                                       ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
+                  print('persson=======================$response');
+                  if (response > 0) {
+                    print('isFavorit===============');
+                    setState(() {
+                      isFavorite = true;
+                    });
+                  }
+                } else {
+                  deleteData();
                 }
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.favorite_rounded,
+                color: isFavorite ? Colors.red : Colors.white,
               ),
             ),
           ],

@@ -25,9 +25,7 @@ class SqlDb {
     return mydb;
   }
 
-  _onUpgrade(Database db, int oldversion, int newvesrion) {
-    print('onUpgrade==========================');
-  }
+  _onUpgrade(Database db, int oldversion, int newvesrion) {}
 
 //انشاء الجدول
   _onCreate(Database db, int version) async {
@@ -36,13 +34,13 @@ class SqlDb {
         'CREATE TABLE "contentmodel" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "id_content" TEXT, "name" TEXT)');
 
     await batch.commit();
-    print('data created');
   }
 
 //
   readData(String sql) async {
     Database? mydb = await db;
     List<Map> response = await mydb!.rawQuery(sql);
+    print('read data=================');
     return response;
   }
 

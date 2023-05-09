@@ -7,7 +7,7 @@ String kAppName = 'الشيخ عبدالمحسن بن محمد الأحمد';
 String kUrl = 'https://www.shanqiti.com/';
 
 //Colors
-MaterialColor kMainColor = Colors.red;
+MaterialColor kMainColor = Colors.blue;
 Color kIconColor = Colors.grey;
 Color kGradianColor1 = const Color(0xFF144771);
 Color kGradianColor2 = const Color(0Xff071A2C);
