@@ -1,11 +1,10 @@
+import 'package:dinetemp/widgets/button_favorite.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
-
 import '../constants/constants.dart';
-import '../data/sqldb.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final List<String> listLink;
@@ -23,27 +22,8 @@ class AudioPlayerScreen extends StatefulWidget {
 }
 
 class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
-  SqlDb sqlDb = SqlDb();
-
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
-  bool? isFavorite;
-
-  Future<List<Map>> checkFavorite() async {
-    List<Map> response = await sqlDb
-        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
-
-    if (response.isEmpty) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
-    return response;
-  }
 
   Stream<PositionData> get _positionDataStream =>
       Rx.combineLatest3<Duration, Duration, Duration?, PositionData>(
@@ -60,7 +40,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
-    checkFavorite();
+
     _audioPlayer = AudioPlayer();
     _init();
   }
@@ -111,24 +91,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             textAlign: TextAlign.center,
           ),
           actions: [
-            IconButton(
-              onPressed: () async {
-                int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.favorite_rounded,
-              ),
-            ),
+            ButtonFavorite(id: widget.id, title: widget.title),
           ],
           backgroundColor: kGradianColor1,
           elevation: 0,

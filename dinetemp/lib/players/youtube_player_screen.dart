@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:youtube_player_flutter/youtube_player_flutter.dart';
 import '../constants/constants.dart';
 import '../data/sqldb.dart';
+import '../widgets/button_favorite.dart';
 
 class YoutubeVideoPlayerScreen extends StatefulWidget {
   final String videoUrl;
@@ -21,8 +22,6 @@ class YoutubeVideoPlayerScreen extends StatefulWidget {
 }
 
 class _YoutubeVideoPlayerScreenState extends State<YoutubeVideoPlayerScreen> {
-  SqlDb sqlDb = SqlDb();
-  bool isFavorite = false;
   late YoutubePlayerController _controller;
 
   @override
@@ -62,24 +61,7 @@ class _YoutubeVideoPlayerScreenState extends State<YoutubeVideoPlayerScreen> {
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
-            IconButton(
-              onPressed: () async {
-                int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.favorite_rounded,
-              ),
-            ),
+            ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
         body: YoutubePlayerBuilder(

@@ -6,6 +6,10 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
 import '../data/sqldb.dart';
+import '../widgets/add_favorite.dart';
+import '../widgets/button_favorite.dart';
+import '../widgets/check_favorite.dart';
+import '../widgets/delete_favorite.dart';
 import 'audio_player_screen.dart';
 
 class Mp3Mp4Player extends StatefulWidget {
@@ -25,9 +29,6 @@ class Mp3Mp4Player extends StatefulWidget {
 }
 
 class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
-  SqlDb sqlDb = SqlDb();
-  bool? isFavorite;
-
   late VideoPlayerController videoPlayerController;
   late CustomVideoPlayerController _customVideoPlayerController;
   late AudioPlayer _audioPlayer;
@@ -62,26 +63,9 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
     await _audioPlayer.setAudioSource(playList);
   }
 
-  Future<List<Map>> checkFavorite() async {
-    List<Map> response = await sqlDb
-        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
-
-    if (response.isEmpty) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
-    return response;
-  }
-
   @override
   void initState() {
     super.initState();
-    checkFavorite();
     for (int i = 0; i < widget.videoUrls.length; i++) {
       if (widget.videoUrls[i].contains('.mp3')) {
         mp3Link = widget.videoUrls[i];
@@ -114,24 +98,7 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
-            IconButton(
-              onPressed: () async {
-                int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.favorite_rounded,
-              ),
-            ),
+            ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
         body: Column(

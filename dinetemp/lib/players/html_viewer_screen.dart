@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../data/sqldb.dart';
 import '../widgets/add_favorite.dart';
+import '../widgets/button_favorite.dart';
 import '../widgets/check_favorite.dart';
 import '../widgets/delete_favorite.dart';
 
@@ -23,17 +24,6 @@ class HtmlViwerScreen extends StatefulWidget {
 class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
   SqlDb sqlDb = SqlDb();
   double fontSize = 18;
-  bool isFavorite = false;
-
-  @override
-  void initState() {
-    checkFavorite(id: widget.id).then((value) => setState(
-          () {
-            isFavorite = value;
-          },
-        ));
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +33,9 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
-            IconButton(
-              onPressed: () async {
-                if (isFavorite == false) {
-                  addFavorite(id: widget.id, title: widget.title).then(
-                    (value) => setState(
-                      () {
-                        isFavorite = true;
-                      },
-                    ),
-                  );
-                } else {
-                  deleteFavorite(id: widget.id).then(
-                    (value) => setState(
-                      () {
-                        isFavorite = false;
-                      },
-                    ),
-                  );
-                }
-              },
-              icon: Icon(
-                Icons.favorite_rounded,
-                color: isFavorite ? Colors.red : Colors.white,
-              ),
+            ButtonFavorite(
+              id: widget.id,
+              title: widget.title,
             ),
           ],
         ),

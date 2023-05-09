@@ -1,3 +1,5 @@
+import 'package:dinetemp/widgets/button_favorite.dart';
+
 import '../data/sqldb.dart';
 
 Future<bool> addFavorite({required String id, title}) async {

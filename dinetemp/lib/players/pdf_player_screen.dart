@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../data/sqldb.dart';
+import '../widgets/button_favorite.dart';
 
 class PdfPlayerScreen extends StatefulWidget {
   final String link;
@@ -19,27 +20,9 @@ class PdfPlayerScreen extends StatefulWidget {
 }
 
 class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
-  SqlDb sqlDb = SqlDb();
-  bool? isFavorite;
   PdfViewerController pdfViewerController = PdfViewerController();
   TextEditingController textEditingController = TextEditingController();
   double zoom = 1.0;
-
-  Future<List<Map>> checkFavorite() async {
-    List<Map> response = await sqlDb
-        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
-
-    if (response.isEmpty) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
-    return response;
-  }
 
   searchWord(BuildContext context) {
     showDialog(
@@ -75,12 +58,6 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
   }
 
   @override
-  void initState() {
-    checkFavorite();
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
     return Directionality(
       textDirection: TextDirection.rtl,
@@ -94,24 +71,7 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
               },
               icon: const Icon(Icons.search),
             ),
-            IconButton(
-              onPressed: () async {
-                int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.favorite_rounded,
-              ),
-            ),
+            ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
         body: SfPdfViewer.network(

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
-
-import '../data/sqldb.dart';
+import '../widgets/button_favorite.dart';
 
 class ImagesScreen extends StatefulWidget {
   final String title;
@@ -18,31 +17,6 @@ class ImagesScreen extends StatefulWidget {
 }
 
 class _ImagesScreenState extends State<ImagesScreen> {
-  SqlDb sqlDb = SqlDb();
-  bool? isFavorite;
-
-  Future<List<Map>> checkFavorite() async {
-    List<Map> response = await sqlDb
-        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
-
-    if (response.isEmpty) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
-    return response;
-  }
-
-  @override
-  void initState() {
-    checkFavorite();
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Directionality(
@@ -51,24 +25,7 @@ class _ImagesScreenState extends State<ImagesScreen> {
         appBar: AppBar(
           title: Text(widget.title),
           actions: [
-            IconButton(
-              onPressed: () async {
-                int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                print('persson=======================$response');
-                if (response > 0) {
-                  print('isFavorit===============');
-                  setState(() {
-                    isFavorite = true;
-                  });
-                }
-              },
-              icon: const Icon(
-                Icons.favorite_rounded,
-              ),
-            ),
+            ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
         body: ListView.separated(
