@@ -1,9 +1,5 @@
 import 'package:flutter/material.dart';
-
 import '../data/sqldb.dart';
-import 'add_favorite.dart';
-import 'check_favorite.dart';
-import 'delete_favorite.dart';
 
 class ButtonFavorite extends StatefulWidget {
   final String id;
@@ -36,8 +32,10 @@ class _ButtonFavoriteState extends State<ButtonFavorite> {
   Widget build(BuildContext context) {
     return IconButton(
       onPressed: () async {
-        ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text(isFavorite ? 'deleted' : 'add')));
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(isFavorite
+                ? 'تم حذف المادة من المفظلة'
+                : 'تم إظافة المادة الى المفظلة')));
         if (isFavorite == false) {
           addFavorite(id: widget.id, title: widget.title).then((value) {
             setState(
@@ -62,4 +60,41 @@ class _ButtonFavoriteState extends State<ButtonFavorite> {
       ),
     );
   }
+}
+
+Future<bool> checkFavorite({required String id}) async {
+  bool isFavorite = false;
+  List<Map> response = await SqlDb()
+      .readData("SELECT * FROM contentmodel WHERE id_content = $id");
+
+  if (response.isEmpty) {
+    isFavorite = false;
+  } else {
+    isFavorite = true;
+  }
+  return isFavorite;
+}
+
+Future<bool> addFavorite({required String id, title}) async {
+  bool isFavorite = false;
+  int response = await SqlDb().insertData('''
+                                     INSERT INTO contentmodel ("id_content" , "name")
+                                     VALUES ("$id", "$title")
+                                      ''');
+
+  if (response > 0) {
+    isFavorite = true;
+  }
+  return isFavorite;
+}
+
+Future<bool> deleteFavorite({required String id}) async {
+  bool isFavorite = false;
+  int delete = await SqlDb()
+      .deleteData("DELETE FROM contentmodel WHERE id_content= $id");
+  if (delete.isFinite) {
+    isFavorite = false;
+  }
+
+  return isFavorite;
 }

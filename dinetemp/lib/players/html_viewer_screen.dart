@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../data/sqldb.dart';
-import '../widgets/add_favorite.dart';
 import '../widgets/button_favorite.dart';
-import '../widgets/check_favorite.dart';
-import '../widgets/delete_favorite.dart';
 
 class HtmlViwerScreen extends StatefulWidget {
   final String title;
