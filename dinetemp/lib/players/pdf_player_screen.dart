@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
-
-import '../data/sqldb.dart';
 import '../widgets/button_favorite.dart';
 
 class PdfPlayerScreen extends StatefulWidget {

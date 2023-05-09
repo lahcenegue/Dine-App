@@ -6,7 +6,6 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
-import '../data/sqldb.dart';
 import '../widgets/button_favorite.dart';
 import 'audio_player_screen.dart';
 

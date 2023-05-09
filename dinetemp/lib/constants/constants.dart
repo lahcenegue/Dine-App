@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 String kAppName = 'الشيخ عبدالمحسن بن محمد الأحمد';
 
 //Links
-String kUrl = 'https://www.shanqiti.com/';
+String kUrl = 'https://www.shanqiti.com';
 
 //Colors
 MaterialColor kMainColor = Colors.blue;

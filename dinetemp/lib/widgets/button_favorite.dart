@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
+import '../constants/constants.dart';
 import '../data/sqldb.dart';
 
 class ButtonFavorite extends StatefulWidget {
@@ -30,34 +32,46 @@ class _ButtonFavoriteState extends State<ButtonFavorite> {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      onPressed: () async {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(isFavorite
-                ? 'تم حذف المادة من المفظلة'
-                : 'تم إظافة المادة الى المفظلة')));
-        if (isFavorite == false) {
-          addFavorite(id: widget.id, title: widget.title).then((value) {
-            setState(
-              () {
-                isFavorite = true;
-              },
-            );
-          });
-        } else {
-          deleteFavorite(id: widget.id).then(
-            (value) => setState(
-              () {
-                isFavorite = false;
-              },
-            ),
-          );
-        }
-      },
-      icon: Icon(
-        Icons.favorite_rounded,
-        color: isFavorite ? Colors.red : Colors.white,
-      ),
+    return Row(
+      children: [
+        IconButton(
+          onPressed: () async {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(isFavorite
+                    ? 'تم حذف المادة من المفضلة'
+                    : 'تم إظافة المادة الى المفضلة')));
+            if (isFavorite == false) {
+              addFavorite(id: widget.id, title: widget.title).then((value) {
+                setState(
+                  () {
+                    isFavorite = true;
+                  },
+                );
+              });
+            } else {
+              deleteFavorite(id: widget.id).then(
+                (value) => setState(
+                  () {
+                    isFavorite = false;
+                  },
+                ),
+              );
+            }
+          },
+          icon: Icon(
+            Icons.favorite_rounded,
+            color: isFavorite ? Colors.red : Colors.white,
+          ),
+        ),
+        IconButton(
+          onPressed: () async {
+            await Share.share(
+                'اسم المحاضرة: ${widget.title} \n $kUrl/play/${widget.id}',
+                subject: 'Look what I made!');
+          },
+          icon: const Icon(Icons.share_rounded),
+        ),
+      ],
     );
   }
 }

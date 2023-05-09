@@ -40,7 +40,6 @@ class SqlDb {
   readData(String sql) async {
     Database? mydb = await db;
     List<Map> response = await mydb!.rawQuery(sql);
-    print('read data=================');
     return response;
   }
 
