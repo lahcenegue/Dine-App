@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import '../data/sqldb.dart';
+import '../widgets/add_favorite.dart';
+import '../widgets/check_favorite.dart';
+import '../widgets/delete_favorite.dart';
 
 class HtmlViwerScreen extends StatefulWidget {
   final String title;
@@ -22,37 +25,13 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
   double fontSize = 18;
   bool isFavorite = false;
 
-  Future<List<Map>> checkFavorite() async {
-    List<Map> response = await sqlDb
-        .readData("SELECT * FROM contentmodel WHERE id_content = ${widget.id}");
-
-    if (response.isEmpty) {
-      setState(() {
-        isFavorite = false;
-      });
-    } else {
-      setState(() {
-        isFavorite = true;
-      });
-    }
-    return response;
-  }
-
-  Future<int> deleteData() async {
-    int delete = await sqlDb
-        .deleteData("DELETE FROM contentmodel WHERE id_content= ${widget.id}");
-    print('=============$delete==================');
-    if (delete == 1) {
-      setState(() {
-        isFavorite = false;
-      });
-    }
-    return delete;
-  }
-
   @override
   void initState() {
-    checkFavorite();
+    checkFavorite(id: widget.id).then((value) => setState(
+          () {
+            isFavorite = value;
+          },
+        ));
     super.initState();
   }
 
@@ -67,19 +46,21 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
             IconButton(
               onPressed: () async {
                 if (isFavorite == false) {
-                  int response = await sqlDb.insertData('''
-                                     INSERT INTO contentmodel ("id_content" , "name")
-                                     VALUES ("${widget.id}", "${widget.title}")
-                                      ''');
-                  print('persson=======================$response');
-                  if (response > 0) {
-                    print('isFavorit===============');
-                    setState(() {
-                      isFavorite = true;
-                    });
-                  }
+                  addFavorite(id: widget.id, title: widget.title).then(
+                    (value) => setState(
+                      () {
+                        isFavorite = true;
+                      },
+                    ),
+                  );
                 } else {
-                  deleteData();
+                  deleteFavorite(id: widget.id).then(
+                    (value) => setState(
+                      () {
+                        isFavorite = false;
+                      },
+                    ),
+                  );
                 }
               },
               icon: Icon(
