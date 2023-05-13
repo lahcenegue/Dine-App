@@ -40,7 +40,6 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
-
     _audioPlayer = AudioPlayer();
     _init();
   }
@@ -77,6 +76,8 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
+    double widthScreen = MediaQuery.of(context).size.width;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -93,43 +94,22 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           actions: [
             ButtonFavorite(id: widget.id, title: widget.title),
           ],
-          backgroundColor: kGradianColor1,
-          elevation: 0,
         ),
-        extendBody: true,
         body: Container(
           padding: const EdgeInsets.all(20),
-          height: double.infinity,
-          width: double.infinity,
-          decoration: BoxDecoration(
-            gradient: LinearGradient(
-              begin: Alignment.topCenter,
-              end: Alignment.bottomCenter,
-              colors: [
-                kGradianColor1,
-                kGradianColor2,
-              ],
-            ),
-          ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              StreamBuilder(
-                stream: _audioPlayer.sequenceStateStream,
-                builder: (context, snapshot) {
-                  final state = snapshot.data;
-                  if (state?.sequence.isEmpty ?? true) {
-                    return const SizedBox();
-                  }
-                  final metadata = state!.currentSource!.tag as MediaItem;
-                  return MediaMetaData(
-                    imageUrl: metadata.artUri.toString(),
-                    artist: metadata.artist ?? '',
-                    title: metadata.title,
-                  );
-                },
+              ClipRRect(
+                borderRadius: BorderRadius.circular(10),
+                child: Image.network(
+                  kSoundInage,
+                  height: heightScreen * 0.28,
+                  width: widthScreen * 0.6,
+                  fit: BoxFit.cover,
+                ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 40),
               StreamBuilder(
                 stream: _positionDataStream,
                 builder: (context, snapshot) {
@@ -141,7 +121,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                     progressBarColor: Colors.red,
                     thumbColor: Colors.red,
                     timeLabelTextStyle: const TextStyle(
-                      color: Colors.white,
+                      color: Colors.black,
                       fontWeight: FontWeight.w600,
                     ),
                     progress: positionData?.position ?? Duration.zero,
@@ -151,10 +131,33 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 20),
               Controls(
                 audioPlayer: _audioPlayer,
                 audioLength: playListChildren.length,
+              ),
+              const Spacer(),
+              SizedBox(
+                height: heightScreen * 0.25,
+                child: ListView.builder(
+                  itemCount: playListChildren.length,
+                  itemBuilder: (context, index) {
+                    return Card(
+                      elevation: 05,
+                      shadowColor: Colors.grey,
+                      child: ListTile(
+                        title: Text('${index + 1}- ${widget.title}'),
+                        leading: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.close),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () {},
+                          icon: const Icon(Icons.download),
+                        ),
+                      ),
+                    );
+                  },
+                ),
               ),
             ],
           ),
@@ -181,7 +184,7 @@ class Controls extends StatelessWidget {
         IconButton(
           onPressed: audioPlayer.seekToNext,
           iconSize: 60,
-          color: audioLength <= 1 ? Colors.grey[700] : Colors.white,
+          color: audioLength <= 1 ? Colors.grey[700] : Colors.black,
           icon: const Icon(Icons.skip_next_rounded),
         ),
         StreamBuilder<PlayerState>(
@@ -193,29 +196,29 @@ class Controls extends StatelessWidget {
             if (!(playing ?? false)) {
               return IconButton(
                 onPressed: audioPlayer.play,
-                iconSize: 80,
-                color: Colors.white,
+                iconSize: 70,
+                color: Colors.black,
                 icon: const Icon(Icons.play_arrow_rounded),
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
                 onPressed: audioPlayer.pause,
-                iconSize: 80,
-                color: Colors.white,
+                iconSize: 70,
+                color: Colors.black,
                 icon: const Icon(Icons.pause_rounded),
               );
             }
             return const Icon(
               Icons.play_arrow_rounded,
-              size: 80,
-              color: Colors.white,
+              size: 70,
+              color: Colors.black,
             );
           },
         ),
         IconButton(
           onPressed: audioPlayer.seekToPrevious,
           iconSize: 60,
-          color: audioLength <= 1 ? Colors.grey[700] : Colors.white,
+          color: audioLength <= 1 ? Colors.grey[700] : Colors.black,
           icon: const Icon(Icons.skip_previous_rounded),
         ),
       ],
@@ -232,54 +235,4 @@ class PositionData {
   final Duration position;
   final Duration bufferedPosition;
   final Duration duration;
-}
-
-class MediaMetaData extends StatelessWidget {
-  final String imageUrl;
-  final String title;
-  final String artist;
-  const MediaMetaData({
-    super.key,
-    required this.artist,
-    required this.imageUrl,
-    required this.title,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        DecoratedBox(
-          decoration: BoxDecoration(
-            boxShadow: const [
-              BoxShadow(
-                color: Colors.black12,
-                offset: Offset(2, 4),
-                blurRadius: 4,
-              ),
-            ],
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(10),
-            child: Image.network(
-              imageUrl,
-              height: 300,
-              width: 300,
-              fit: BoxFit.cover,
-            ),
-          ),
-        ),
-        const SizedBox(height: 20),
-        Text(
-          artist,
-          style: const TextStyle(
-            color: Colors.white,
-            fontSize: 20,
-          ),
-          textAlign: TextAlign.center,
-        ),
-      ],
-    );
-  }
 }
