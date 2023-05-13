@@ -5,6 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
+import '../widgets/download_list.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final List<String> listLink;
@@ -40,6 +41,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
   @override
   void initState() {
     super.initState();
+
     _audioPlayer = AudioPlayer();
     _init();
   }
@@ -95,21 +97,20 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
             ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
-        body: Container(
+        body: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
             children: [
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
                   kSoundInage,
-                  height: heightScreen * 0.28,
+                  height: heightScreen * 0.25,
                   width: widthScreen * 0.6,
                   fit: BoxFit.cover,
                 ),
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 20),
               StreamBuilder(
                 stream: _positionDataStream,
                 builder: (context, snapshot) {
@@ -137,24 +138,14 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
               ),
               const Spacer(),
               SizedBox(
-                height: heightScreen * 0.25,
+                height: heightScreen * 0.3,
                 child: ListView.builder(
+                  physics: const ScrollPhysics(),
+                  shrinkWrap: true,
                   itemCount: playListChildren.length,
                   itemBuilder: (context, index) {
-                    return Card(
-                      elevation: 05,
-                      shadowColor: Colors.grey,
-                      child: ListTile(
-                        title: Text('${index + 1}- ${widget.title}'),
-                        leading: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.close),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.download),
-                        ),
-                      ),
+                    return DownloadList(
+                      title: '$index',
                     );
                   },
                 ),
@@ -196,21 +187,21 @@ class Controls extends StatelessWidget {
             if (!(playing ?? false)) {
               return IconButton(
                 onPressed: audioPlayer.play,
-                iconSize: 70,
+                iconSize: 80,
                 color: Colors.black,
                 icon: const Icon(Icons.play_arrow_rounded),
               );
             } else if (processingState != ProcessingState.completed) {
               return IconButton(
                 onPressed: audioPlayer.pause,
-                iconSize: 70,
+                iconSize: 80,
                 color: Colors.black,
                 icon: const Icon(Icons.pause_rounded),
               );
             }
             return const Icon(
               Icons.play_arrow_rounded,
-              size: 70,
+              size: 80,
               color: Colors.black,
             );
           },
