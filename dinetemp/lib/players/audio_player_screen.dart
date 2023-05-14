@@ -5,7 +5,7 @@ import 'package:just_audio/just_audio.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
-import '../widgets/download_list.dart';
+import '../widgets/download_item.dart';
 
 class AudioPlayerScreen extends StatefulWidget {
   final List<String> listLink;
@@ -144,8 +144,9 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
                   shrinkWrap: true,
                   itemCount: playListChildren.length,
                   itemBuilder: (context, index) {
-                    return DownloadList(
-                      title: '$index',
+                    return DownloadItem(
+                      title: '${index + 1}- ${widget.title}',
+                      url: widget.listLink[index],
                     );
                   },
                 ),

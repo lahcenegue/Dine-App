@@ -15,13 +15,14 @@ class SqlDb {
 
   initialDb() async {
     String databasePath = await getDatabasesPath(); //مسار حفظ الملف
-    String path = p.join(databasePath, 'dineapp1.db'); //اسم الداتا بيز
+    String path = p.join(databasePath, 'dineapp6.db'); //اسم الداتا بيز
     Database mydb = await openDatabase(
       path,
       onCreate: _onCreate,
       version: 1,
       onUpgrade: _onUpgrade,
     );
+
     return mydb;
   }
 
@@ -32,6 +33,9 @@ class SqlDb {
     Batch batch = db.batch();
     batch.execute(
         'CREATE TABLE "contentmodel" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "id_content" TEXT, "name" TEXT)');
+
+    batch.execute(
+        'CREATE TABLE "download" ("id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, "name" TEXT, "path" TEXT)');
 
     await batch.commit();
   }
