@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../players/audio_player_screen.dart';
+import '../players/mp3_player_screen.dart';
 import '../players/html_viewer_screen.dart';
 import '../players/images_screen.dart';
 import '../players/mp3_mp4_player.dart';
@@ -46,7 +46,7 @@ Widget screenPiker(ContentViewModel contentViewModel) {
         videoUrls: contentViewModel.listLinks!,
       );
     } else if (type.contains('Mp3')) {
-      return AudioPlayerScreen(
+      return Mp3PlayerScreen(
         listLink: contentViewModel.listLinks!,
         id: contentViewModel.id,
         title: contentViewModel.name,

@@ -6,7 +6,8 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
 import '../widgets/button_favorite.dart';
-import 'audio_player_screen.dart';
+import '../widgets/download_item.dart';
+import 'mp3_player_screen.dart';
 
 class Mp3Mp4Player extends StatefulWidget {
   final String title;
@@ -50,7 +51,7 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
           tag: MediaItem(
             id: widget.id,
             title: widget.title,
-            artUri: Uri.parse(kSoundInage),
+            artUri: Uri.parse(kSoundImage),
           ),
         ),
       ],
@@ -88,6 +89,7 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -98,25 +100,22 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
           ],
         ),
         body: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(
-              child: CustomVideoPlayer(
-                  customVideoPlayerController: _customVideoPlayerController),
+              child: Center(
+                child: CustomVideoPlayer(
+                    customVideoPlayerController: _customVideoPlayerController),
+              ),
             ),
-            const SizedBox(height: 50),
+            const Divider(
+              color: Colors.black,
+              indent: 15,
+              endIndent: 15,
+              height: 8,
+            ),
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    kGradianColor1,
-                    kGradianColor2,
-                  ],
-                ),
-              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -131,7 +130,7 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
                         progressBarColor: Colors.red,
                         thumbColor: Colors.red,
                         timeLabelTextStyle: const TextStyle(
-                          color: Colors.white,
+                          color: Colors.black,
                           fontWeight: FontWeight.w600,
                         ),
                         progress: positionData?.position ?? Duration.zero,
@@ -142,12 +141,31 @@ class _Mp3Mp4PlayerState extends State<Mp3Mp4Player> {
                       );
                     },
                   ),
-                  const SizedBox(height: 8),
                   Controls(
                     audioPlayer: _audioPlayer,
                     audioLength: playListChildren.length,
                   ),
                 ],
+              ),
+            ),
+            const Divider(
+              color: Colors.black,
+              indent: 15,
+              endIndent: 15,
+              height: 8,
+            ),
+            SizedBox(
+              height: heightScreen * 0.22,
+              child: ListView.builder(
+                physics: const ScrollPhysics(),
+                shrinkWrap: true,
+                itemCount: widget.videoUrls.length,
+                itemBuilder: (context, index) {
+                  return DownloadItem(
+                    title: '${index + 1}- ${widget.title}',
+                    url: widget.videoUrls[index],
+                  );
+                },
               ),
             ),
           ],

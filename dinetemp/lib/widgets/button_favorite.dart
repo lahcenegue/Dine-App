@@ -18,7 +18,6 @@ class ButtonFavorite extends StatefulWidget {
 
 class _ButtonFavoriteState extends State<ButtonFavorite> {
   bool isFavorite = false;
-  SqlDb sqlDb = SqlDb();
 
   @override
   void initState() {

@@ -7,7 +7,8 @@ import 'package:just_audio_background/just_audio_background.dart';
 import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
 import '../widgets/button_favorite.dart';
-import 'audio_player_screen.dart';
+import '../widgets/download_item.dart';
+import 'mp3_player_screen.dart';
 
 class YoutubeMp3Player extends StatefulWidget {
   final String title;
@@ -50,7 +51,7 @@ class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
           tag: MediaItem(
             id: widget.id,
             title: widget.title,
-            artUri: Uri.parse(kSoundInage),
+            artUri: Uri.parse(kSoundImage),
           ),
         ),
       ],
@@ -104,6 +105,7 @@ class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -117,50 +119,50 @@ class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             //////////// youtube
+
             Expanded(
-              child: YoutubePlayerBuilder(
-                onExitFullScreen: () {
-                  SystemChrome.setPreferredOrientations(
-                      DeviceOrientation.values);
-                },
-                player: YoutubePlayer(
-                  aspectRatio: 16 / 9,
-                  controller: _youtubePlayerController,
-                  showVideoProgressIndicator: true,
-                  progressIndicatorColor: kMainColor,
-                  bottomActions: [
-                    CurrentPosition(),
-                    ProgressBar(
-                      isExpanded: true,
-                      colors: const ProgressBarColors(
-                        playedColor: Colors.red,
-                        handleColor: Colors.red,
-                        backgroundColor: Colors.grey,
-                        bufferedColor: Colors.white,
+              child: Center(
+                child: YoutubePlayerBuilder(
+                  onExitFullScreen: () {
+                    SystemChrome.setPreferredOrientations(
+                        DeviceOrientation.values);
+                  },
+                  player: YoutubePlayer(
+                    aspectRatio: 16 / 9,
+                    controller: _youtubePlayerController,
+                    showVideoProgressIndicator: true,
+                    progressIndicatorColor: kMainColor,
+                    bottomActions: [
+                      CurrentPosition(),
+                      ProgressBar(
+                        isExpanded: true,
+                        colors: const ProgressBarColors(
+                          playedColor: Colors.red,
+                          handleColor: Colors.red,
+                          backgroundColor: Colors.grey,
+                          bufferedColor: Colors.white,
+                        ),
                       ),
-                    ),
-                    RemainingDuration(),
-                    FullScreenButton(),
-                  ],
+                      RemainingDuration(),
+                      FullScreenButton(),
+                    ],
+                  ),
+                  builder: (context, player) {
+                    return player;
+                  },
                 ),
-                builder: (context, player) {
-                  return player;
-                },
               ),
             ),
-            const SizedBox(height: 50),
+
+            const Spacer(),
+            const Divider(
+              color: Colors.black,
+              indent: 15,
+              endIndent: 15,
+              height: 8,
+            ),
             Container(
               padding: const EdgeInsets.all(12),
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topCenter,
-                  end: Alignment.bottomCenter,
-                  colors: [
-                    kGradianColor1,
-                    kGradianColor2,
-                  ],
-                ),
-              ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
@@ -193,6 +195,16 @@ class _YoutubeMp3PlayerState extends State<YoutubeMp3Player> {
                   ),
                 ],
               ),
+            ),
+            const Divider(
+              color: Colors.black,
+              indent: 15,
+              endIndent: 15,
+              height: 8,
+            ),
+            DownloadItem(
+              title: '1- ${widget.title}',
+              url: mp3Link,
             ),
           ],
         ),

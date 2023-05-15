@@ -14,5 +14,5 @@ Color kGradianColor2 = const Color(0Xff071A2C);
 
 //images
 String kLogo = 'assets/images/logo.png';
-String kSoundInage =
+String kSoundImage =
     'https://as1.ftcdn.net/v2/jpg/00/85/61/98/1000_F_85619893_qcV9Vr8GQGGToKKozmKZlon9M1rNwWNd.jpg';

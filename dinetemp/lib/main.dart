@@ -1,7 +1,11 @@
+import 'package:dinetemp/widgets/check_permission.dart';
+
 import '../constants/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio_background/just_audio_background.dart';
 import 'screens/navigation_screen.dart';
+
+bool isPermission = false;
 
 Future<void> main() async {
   await JustAudioBackground.init(
@@ -9,7 +13,7 @@ Future<void> main() async {
     androidNotificationChannelName: 'Audio playback',
     androidNotificationOngoing: true,
   );
-
+  await checkPermissions();
   runApp(const MyApp());
 }
 

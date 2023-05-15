@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 import '../widgets/button_favorite.dart';
+import '../widgets/download_item.dart';
 
 class PdfPlayerScreen extends StatefulWidget {
   final String link;
@@ -57,6 +58,7 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
 
   @override
   Widget build(BuildContext context) {
+    double heightScreen = MediaQuery.of(context).size.height;
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -72,9 +74,19 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
             ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
-        body: SfPdfViewer.network(
-          widget.link,
-          controller: pdfViewerController,
+        body: Column(
+          children: [
+            Expanded(
+              child: SfPdfViewer.network(
+                widget.link,
+                controller: pdfViewerController,
+              ),
+            ),
+            DownloadItem(
+              title: widget.title,
+              url: widget.link,
+            ),
+          ],
         ),
         floatingActionButton: Container(
           width: 120,
@@ -108,7 +120,8 @@ class _PdfPlayerScreenState extends State<PdfPlayerScreen> {
             ],
           ),
         ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButtonLocation:
+            FloatingActionButtonLocation.miniCenterFloat,
       ),
     );
   }

@@ -36,16 +36,22 @@ class _HtmlViwerScreenState extends State<HtmlViwerScreen> {
             ),
           ],
         ),
-        body: SingleChildScrollView(
-          child: Html(
-            data: widget.text,
-            style: {
-              "p": Style(
-                padding: const EdgeInsets.all(12),
-                fontSize: FontSize(fontSize),
-                textAlign: TextAlign.justify,
-              ),
-            },
+        body: Scrollbar(
+          thickness: 10,
+          thumbVisibility: true,
+          interactive: true,
+          radius: const Radius.circular(08),
+          child: SingleChildScrollView(
+            child: Html(
+              data: widget.text,
+              style: {
+                "p": Style(
+                  padding: const EdgeInsets.all(12),
+                  fontSize: FontSize(fontSize),
+                  textAlign: TextAlign.justify,
+                ),
+              },
+            ),
           ),
         ),
         floatingActionButton: Container(

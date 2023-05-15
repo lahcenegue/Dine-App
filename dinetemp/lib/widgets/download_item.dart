@@ -3,12 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
 import '../data/sqldb.dart';
+import '../main.dart';
 import 'check_permission.dart';
 import 'directory_path.dart';
 
 class DownloadItem extends StatefulWidget {
   final String title;
   final String url;
+
   const DownloadItem({
     super.key,
     required this.title,
@@ -20,7 +22,6 @@ class DownloadItem extends StatefulWidget {
 }
 
 class _DownloadItemState extends State<DownloadItem> {
-  bool isPermission = false;
   bool dowloading = false;
   bool fileExists = false;
   double progress = 0;
@@ -28,19 +29,7 @@ class _DownloadItemState extends State<DownloadItem> {
   late String filePath;
   late CancelToken cancelToken;
 
-  CheckPermission checkAllPermission = CheckPermission();
-  SqlDb sqlDb = SqlDb();
-
-  checkPermission() async {
-    bool permission = await checkAllPermission.isStoragePermission();
-    if (permission) {
-      setState(() {
-        isPermission = true;
-      });
-    }
-  }
-
-  Future<bool> addFavorite(
+  Future<bool> addDownloadFavorite(
       {required String title, required String path}) async {
     bool isFavorite = false;
     int response = await SqlDb().insertData('''
@@ -75,7 +64,7 @@ class _DownloadItemState extends State<DownloadItem> {
         },
         cancelToken: cancelToken,
       ).then((value) {
-        addFavorite(
+        addDownloadFavorite(
           title: widget.title,
           path: filePath,
         ).then((value) {
@@ -112,7 +101,7 @@ class _DownloadItemState extends State<DownloadItem> {
   @override
   void initState() {
     super.initState();
-    checkPermission();
+
     setState(() {
       fileName = path.basename(widget.url);
     });
@@ -163,13 +152,12 @@ class _DownloadItemState extends State<DownloadItem> {
         trailing: IconButton(
           onPressed: () {
             if (isPermission) {
-              print('permission is true');
               if (!fileExists) {
-                print('file Exisite');
                 startDownload();
               }
             } else {
-              checkPermission();
+              print('isPermision: $isPermission');
+              checkPermissions();
             }
           },
           icon: fileExists

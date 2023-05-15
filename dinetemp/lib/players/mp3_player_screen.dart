@@ -7,11 +7,11 @@ import 'package:rxdart/rxdart.dart';
 import '../constants/constants.dart';
 import '../widgets/download_item.dart';
 
-class AudioPlayerScreen extends StatefulWidget {
+class Mp3PlayerScreen extends StatefulWidget {
   final List<String> listLink;
   final String id;
   final String title;
-  const AudioPlayerScreen({
+  const Mp3PlayerScreen({
     super.key,
     required this.listLink,
     required this.id,
@@ -19,10 +19,10 @@ class AudioPlayerScreen extends StatefulWidget {
   });
 
   @override
-  State<AudioPlayerScreen> createState() => _AudioPlayerScreenState();
+  State<Mp3PlayerScreen> createState() => _Mp3PlayerScreenState();
 }
 
-class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
+class _Mp3PlayerScreenState extends State<Mp3PlayerScreen> {
   late AudioPlayer _audioPlayer;
   List<AudioSource> playListChildren = [];
 
@@ -57,7 +57,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
           tag: MediaItem(
             id: '${widget.id}$i',
             title: widget.title,
-            artUri: Uri.parse(kSoundInage),
+            artUri: Uri.parse(kSoundImage),
           ),
         ),
       );
@@ -104,7 +104,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
               ClipRRect(
                 borderRadius: BorderRadius.circular(10),
                 child: Image.network(
-                  kSoundInage,
+                  kSoundImage,
                   height: heightScreen * 0.25,
                   width: widthScreen * 0.6,
                   fit: BoxFit.cover,
@@ -138,7 +138,7 @@ class _AudioPlayerScreenState extends State<AudioPlayerScreen> {
               ),
               const Spacer(),
               SizedBox(
-                height: heightScreen * 0.3,
+                height: heightScreen * 0.22,
                 child: ListView.builder(
                   physics: const ScrollPhysics(),
                   shrinkWrap: true,

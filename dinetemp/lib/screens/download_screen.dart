@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../data/sqldb.dart';
+import 'package:open_file_plus/open_file_plus.dart';
 
 class DownloadScreen extends StatefulWidget {
   const DownloadScreen({super.key});
@@ -61,14 +62,7 @@ class _DownloadScreenState extends State<DownloadScreen> {
                     ),
                     trailing: const Icon(Icons.arrow_back_ios_new),
                     onTap: () {
-                      // Navigator.push(
-                      //   context,
-                      //   MaterialPageRoute(
-                      //     builder: (context) => ContentScreen(
-                      //       id: snapshot.data![index]['id_content'],
-                      //     ),
-                      //   ),
-                      // );
+                      OpenFile.open(snapshot.data![index]['path']);
                     },
                   ),
                 );

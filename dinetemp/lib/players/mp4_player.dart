@@ -1,6 +1,7 @@
 import 'package:appinio_video_player/appinio_video_player.dart';
 import 'package:flutter/material.dart';
 import '../widgets/button_favorite.dart';
+import '../widgets/download_item.dart';
 
 class Mp4PlayerScreen extends StatefulWidget {
   final String videoUrl;
@@ -50,8 +51,18 @@ class _Mp4PlayerScreenState extends State<Mp4PlayerScreen> {
             ButtonFavorite(id: widget.id, title: widget.title),
           ],
         ),
-        body: CustomVideoPlayer(
-            customVideoPlayerController: _customVideoPlayerController),
+        body: Column(
+          children: [
+            CustomVideoPlayer(
+                customVideoPlayerController: _customVideoPlayerController),
+            const Spacer(),
+            SizedBox(
+                child: DownloadItem(
+              title: '1- ${widget.title}',
+              url: widget.videoUrl,
+            )),
+          ],
+        ),
       ),
     );
   }
