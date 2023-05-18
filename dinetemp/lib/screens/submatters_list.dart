@@ -26,6 +26,13 @@ class _SubMattersListState extends State<SubMattersList> {
     hvm.fetchSubMatterList(widget.catId);
   }
 
+  @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
   Future refreshData() async {
     await Future.delayed(const Duration(seconds: 2));
     hvm.fetchSubMatterList(widget.catId);

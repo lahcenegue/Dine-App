@@ -22,6 +22,13 @@ class _ContentScreenState extends State<ContentScreen> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     hvm.addListener(() {
       setState(() {});

@@ -28,6 +28,13 @@ class _CategorieDetailState extends State<CategorieDetail> {
   }
 
   @override
+  void setState(fn) {
+    if (mounted) {
+      super.setState(fn);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     hvm.addListener(() {
       setState(() {});
